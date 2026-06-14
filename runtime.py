@@ -1,21 +1,28 @@
-import sys
 import subprocess
 
-def execute_js(code):
-    result = subprocess.run(
-        ["node", "-e", code],
-        capture_output=True,
-        text=True
-    )
+print("=== JavaScript Runtime ===")
+print("Paste JS code. Type RUN on a new line to execute.\n")
 
-    sys.stdout.write(result.stdout)
-    sys.stderr.write(result.stderr)
+code = []
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        with open(sys.argv[1], "r", encoding="utf-8") as f:
-            code = f.read()
-    else:
-        code = sys.stdin.read()
+while True:
+    line = input()
 
-    execute_js(code)
+    if line.strip() == "RUN":
+        break
+
+    code.append(line)
+
+js_code = "\n".join(code)
+
+result = subprocess.run(
+    ["node", "-e", js_code],
+    capture_output=True,
+    text=True
+)
+
+if result.stdout:
+    print(result.stdout)
+
+if result.stderr:
+    print(result.stderr)
